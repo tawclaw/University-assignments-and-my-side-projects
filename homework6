@@ -1,0 +1,90 @@
+import java.util.Random;
+import java.util.Arrays;
+
+/**
+ * Write a description of class Combination here.
+ * 
+ * @author  Nicholas Souter
+ * @version 26 October 2015
+ */
+
+public class Combination
+{
+    //fields
+    int length;
+    int max;
+    int[] comboArray;
+
+    /**
+     * Constructor
+     * @param initLength  length of the combination
+     * @param initMax  maximum value of each number in the combination
+     */
+    public Combination(int initLength, int initMax)
+    {
+        Random randGen = new Random();
+
+        //assign values to fields
+        length = initLength;
+        max = initMax;
+
+        //instantiate the combination array (of ints)
+        comboArray = new int[initLength];
+
+        //randomly assign a number to each place in the combination array
+        for(int i = 0; i < initLength; i++)
+        {
+            // I add 1 to .nextInt argument so that it can display the max int and 0
+            comboArray[i] = randGen.nextInt(initMax + 1);
+        }
+    }
+
+    /**
+     * Builds and returns a String containing values in the combination
+     * Separated by commas and surrounded by square brackets
+     * I use a method from java.util.Arrays to do this
+     * 
+     * @return String  comboString is the combination array in String form
+     */
+    public String toString()
+    {
+        String comboString = Arrays.toString(comboArray);
+        return comboString;
+    }
+
+    /**
+     * Sets the value of an integer in the specified index of the Combination array
+     * 
+     * @param int  Index of Combination array to replace
+     * @param int  Value to replace the indexed integer with
+     */
+    public void setValue(int index, int value)
+    {
+        if(value <= max)
+        {
+            comboArray[index] = value;
+            toString();
+        }
+    }
+    
+    /**
+     * Compares Combination object with another Combination object
+     * Converts both Combinations to Strings then calls String.equals to evaluate
+     * 
+     * @param Combination  The Combination object to compare to
+     * @return boolean  True if objects equal each other, false if not
+     */
+    public boolean equals(Combination other)
+    {
+        String first = Arrays.toString(comboArray);
+        String second = other.toString();
+        if(first.equals(second))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}
