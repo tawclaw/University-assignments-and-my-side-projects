@@ -1,0 +1,155 @@
+**
+ * This class instantitates a turtle and uses it to draw shapes.
+ * 
+ * @author Nicholas Souter
+ * @version v1.0
+ */
+public class TurtleDrawer
+{
+    // instance variables - replace the example below with your own
+    private Turtle pen;
+
+    /**
+     * Constructor for objects of class TurtleDrawer
+     */
+    public TurtleDrawer()
+    {
+        // initialise instance variables
+        pen = new Turtle();
+        pen.setPenColor("red");
+        pen.penDown();
+    }
+
+    /**
+     * Draws a triangle
+     * 
+     * @param double sideLength the length of each side of the triangle
+     */
+    public void drawTriangle(double sideLength)
+    {
+        double degreesTurn = 120;
+        int i = 0;
+        pen.penDown();
+
+        while(i < 3)
+        {
+            pen.forward(sideLength);
+            pen.left(degreesTurn);
+            i++;
+        }
+    }
+
+    /**
+     * Draws a polygon given side length, number of sides, and color
+     * 
+     * @param double sideLength the length of each side
+     * @param int numSides number of sides for the polygon
+     * @param String color color for the turtle to draw in
+     */
+    public void newPolygon(double sideLength, int numSides, String color)
+    {
+        double degreesTurn = 360 / numSides;
+        int i = numSides;
+        pen.setPenColor(color);
+        pen.penDown();
+
+        while(i > 0)
+        {
+            pen.forward(sideLength);
+            pen.left(degreesTurn);
+            i--;
+        }
+    }
+
+    /**
+     * Draws a zigzag pattern with alternating colors
+     * 
+     * @param double length length of the overall pattern
+     * @param double width length of one zig/zag
+     * @param String zigColor color of zigs
+     * @param String zagColor color of zags
+     */
+    public void drawZigzag(double length, double width, String zigColor, String zagColor)
+    {
+        double i = 0;
+        double zagLength = Math.sqrt(2 * width * width);
+        pen.penDown();
+
+        while(i < length)
+        {
+            pen.left(90);
+            pen.setPenColor(zigColor);
+            pen.forward(width);
+            pen.right(135);
+            pen.setPenColor(zagColor);
+            pen.forward(zagLength);
+            pen.left(45);
+            i += width;
+        }
+    }
+
+    /**
+     * Draws a custom pattern
+     */
+    public void drawMyPattern()
+    {
+        double length = 90;
+        double length2 = 180;
+        String color1 = "red";
+        String color2 = "blue";
+        String color3 = "purple";
+        String currentColor = color2;
+        int i = 0;
+
+        while(i < 4)
+        {
+            newPolygon(length, 4, color1);
+            pen.penUp();
+            pen.forward(length);
+            pen.penDown();
+            pen.setPenColor(color2);
+            pen.forward(4 * length);
+            pen.left(90);
+            i ++;
+        }
+
+        i = 0;
+        
+        pen.penDown();
+        pen.forward(length);
+        pen.left(90);
+        pen.forward(length);
+        pen.right(90);
+        pen.setPenColor("green");
+        
+        while(i < 4)
+        {
+            pen.penDown();
+            drawDashedLine(length * 3, length / 4);
+            pen.left(90);
+            i++;
+        }
+
+        
+    }
+    
+    /**
+     * Draws a dashed line
+     * 
+     * @param double length The overall length of the line
+     * @param double dashLength the length of the individual dashes and spaces
+     */
+    public void drawDashedLine(double length, double dashLength)
+    {
+        double i = 0;
+        
+        while(i < length / 2)
+        {
+            pen.penDown();
+            pen.forward(dashLength);
+            pen.penUp();
+            pen.forward(dashLength);
+            i += dashLength;
+        }
+    }
+}
