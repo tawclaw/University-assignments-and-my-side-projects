@@ -88,3 +88,64 @@ public class Combination
         }
     }
 }
+
+
+
+/**
+ * @author  Nicholas Souter
+ * @version  26 October 2015
+ */
+public class ComboGuesser
+{
+    int length;
+    int max;
+    Combination comboKey;
+    
+    /**
+     * Constructor for objects of class ComboGuesser that generates a random combo key
+     * 
+     * @param int initLength  the length of the combo array
+     * @param int initMax  the maximum value to be stored in any given index in the array
+     */
+    public ComboGuesser(int initLength, int initMax)
+    {
+        length = initLength;
+        max = initMax;
+        comboKey = new Combination(initLength, initMax);
+    }
+    
+    /**
+     * Constructor for objects of class ComboGuesser with specified combo
+     * 
+     * @param int initLength the length of the combo array
+     * @param int initMax the maximum value to be stored in any given index in the array
+     * @param Combination combo  the specified Combination object to be used as the key
+     */
+    public ComboGuesser(int initLength, int initMax, Combination combo)
+    {
+        length = initLength;
+        max = initMax;
+        comboKey = combo;
+    }
+    
+    /**
+     * Compares the comboKey against randomly generated arrays until a match is found
+     */
+    public void guessCombo()
+    {
+        boolean success = false;          // boolean success used to trigger the end of the for loop
+        int guesses = 0;
+        String lockString = new String();
+        for(int i = 1; success != true; i++)
+        {
+            Combination lock = new Combination(length, max);
+            if(comboKey.equals(lock) == true)       // using .equals method to evaluate
+            {
+                success = true;
+            }
+            guesses = i;        // guesses gets the number of times incremented by the for loop
+            lockString = lock.toString();
+        }
+        System.out.println("It took " + guesses + " guesses to find the combination.");
+        System.out.println("The combination is: " + lockString);
+    }
