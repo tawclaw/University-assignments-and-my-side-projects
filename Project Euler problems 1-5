@@ -1,0 +1,317 @@
+
+/**
+ * Project Euler problem one "Multiples of 3 and 5"
+ * 
+ * @author Nicholas Souter 
+ * @version 10 November 2015
+ */
+public class ProblemOne
+{
+    // instance variables - replace the example below with your own
+    private int[] numbers;
+
+    /**
+     * Constructor
+     */
+    public ProblemOne()
+    {
+        // initialise instance variables
+        numbers = new int[1000];
+       
+        //fill numbers with numbers 0-999
+        for(int i = 0; i < numbers.length; i++)
+        {
+            numbers[i] = i;
+        }
+    }
+
+    public int solve()
+    {
+        int sum = 0;
+        for(int i = 0; i < numbers.length; i++)
+        {
+            if(numbers[i] % 3 == 0 || numbers[i] % 5 == 0)
+            {
+                sum += numbers[i];
+            }
+        }
+        return sum;
+    }
+}
+
+import java.util.*;
+/**
+ * Project Euler Problem Two "Even Fibonacci numbers"
+ * 
+ * @author Nicholas Souter
+ * @version 10 November 2015
+ */
+public class ProblemTwo
+{
+    //arraylist holding fibonacci sequence
+    private ArrayList<Integer> numbers;
+
+    /**
+     * Constructor
+     */
+    public ProblemTwo()
+    {
+        numbers = new ArrayList<Integer>();
+        numbers.add(1);
+        numbers.add(1, 2);
+
+        for(int i = 1; numbers.get(i) < 4000000; i++)
+        {
+            int x = numbers.get(i - 1) + numbers.get(i);
+            numbers.add(x);
+        }
+    }
+    
+    public int solve()
+    {
+        int sum = 0;
+        for(int i = 0; i < numbers.size(); i++)
+        {
+            if(numbers.get(i) % 2 == 0)
+            {
+               sum += numbers.get(i); 
+            }
+        }
+        return sum;
+    }
+}
+
+import java.util.*;
+/**
+ * Project Euler Problem Three "Largest prime factor"
+ * 
+ * @author Nicholas Souter
+ * @version 10 November 2015
+ * 
+ * STEPS:
+ *  1) Divide starting with 2 incrementally until it divides where % == 0
+ *  2) Store the divisor to a list
+ *  3) Set the current number equal to the old number divided by the previous divisor
+ *  4) Set the current incremented divisor back to 2
+ *  5) If the incremented divisor is greater than the current value, end the process
+ */
+public class ProblemThree
+{
+    private long current;
+    private ArrayList<Integer> factors;
+    private ArrayList<Integer> primes;
+    
+    public ProblemThree(int input)
+    {
+        factors = new ArrayList<Integer>();
+        primes = new ArrayList<Integer>();
+    }
+    
+    public void primeFactorization(long input)
+    {
+        current = input;
+        int i = 2;
+        while(i <= current)
+        {
+            if(current % i == 0)
+            {
+                current = current / i;
+                factors.add(i);
+                i = 2;
+            }
+            else
+            {
+                i++;
+            }
+        }
+        
+        System.out.println("The factors are: " + factors);
+        int size = factors.size();
+        System.out.println("The largest factor is: " + factors.get(size - 1));
+    }
+    
+    public boolean isPrime(int n)
+    {
+        boolean isPrime = false;
+        
+        for(int i = 0; i < primes.size(); i++)
+        {
+            if(n == primes.get(i))
+            {
+                return true;
+            }
+        }
+        
+        int i = 2;
+        while(isPrime == false)
+        {
+            if(i == n)
+            {
+                primes.add(n);
+                return true;
+            }
+            else if(n % i != 0)
+            {
+                i++;
+            }
+            else if(n % i == 0)
+            {
+                return false;
+            }
+        }
+        
+        return false;
+    }
+    
+    public boolean isPrime2(int n)
+    {
+        for(int i = 2; i < n/2+1; i++)
+        {
+            if(n % 1 == 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public ArrayList<Integer> findPrimes(ArrayList<Integer> input)
+    {
+        ArrayList<Integer> foundPrimes = new ArrayList<Integer>();
+        for(int i = 0; i < input.size(); i++)
+        {
+            if(isPrime(input.get(i)) == true)
+            {
+                foundPrimes.add(input.get(i));
+            }
+        }
+        return foundPrimes;
+    }
+}
+
+import java.lang.Object;
+import java.util.StringTokenizer;
+import java.util.Arrays;
+/**
+ * Project Euler Problem 4 "Largest palindrome product"
+ * 
+ * @author Nicholas Souter
+ * @version 12 November 2015
+ * 
+ * STEPS TO CHECK FOR PALINDROME:
+ *  1) Convert the integer to a String
+ *  2) Convert the String to a character array
+ *  3) Create a new array as a copy, reverse the order of the array
+ *  4) Check if the two arrays are equal
+ *  5) If the number is a palindrome, store it in a field arrayList
+ *  
+ * STEPS TO GENERATE PRODUCTS OF THREE DIGIT NUMBERS
+ *  1) Create an array with all three digit numbers
+ *  2) Create an identical array
+ *  3) Multiply array1[i] by all values in array2
+ *  
+ * STEPS TO SOLVE THE PROBLEM
+ *  1) Apply checkPalindrome to all numbers generated by productGenerator
+ *  2) Find the greatest value amongst values stored in the field arrayList of palindromes
+ */
+public class ProblemFour
+{
+    public boolean checkPalindrome(int input)
+    {
+        //Convert the integer to a String
+        String stringInput = Integer.toString(input);
+        
+        //Convert the String to a character array
+        char[] inputArray = stringInput.toCharArray();
+        
+        //Create a copy array and reverse the order
+        char[] inputArrayCopy = stringInput.toCharArray();
+        char temp;
+        for(int i = 0; i < inputArrayCopy.length / 2; i++)
+        {
+            temp = inputArrayCopy[i];
+            inputArrayCopy[i] = inputArrayCopy[inputArrayCopy.length - 1 - i];
+            inputArrayCopy[inputArrayCopy.length - 1 - i] = temp;
+        }
+        
+        //Check if the reversed copy is equal to the original
+        if(Arrays.equals(inputArray, inputArrayCopy))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    public int generateProduct()
+    {
+        int highestPalindrome = 0;
+        
+        //create two new three digit array
+        int[] threeDigitArrayOne = new int[900];
+        int[] threeDigitArrayTwo = new int[900];
+        
+        //fill the arrays with numbers 1-999
+        for(int i  = 0; i < threeDigitArrayOne.length; i++)
+        {
+            threeDigitArrayOne[i] = i + 100;
+            threeDigitArrayTwo[i] = i + 100;
+        }
+        
+        for(int i = 0; i < threeDigitArrayOne.length; i++)
+        {
+            for(int j = 0; j < threeDigitArrayTwo.length; j++)
+            {
+                int time = threeDigitArrayOne[i] * threeDigitArrayTwo[j];
+                if(checkPalindrome(time) && threeDigitArrayOne[i] * threeDigitArrayTwo[j] > highestPalindrome)
+                {
+                    highestPalindrome = threeDigitArrayOne[i] * threeDigitArrayTwo[j];
+                }
+            }
+        }
+        
+        return highestPalindrome;
+    }
+}
+
+
+/**
+ * Project Euler Problem 5 "Smallest Multiple
+ * 
+ * @author Nicholas Souter
+ * @version 22 November 2015
+ * 
+ * STEPS TO CHECK IF AN INTEGER IS EVENLY DIVISIBLE BY INTS 1-20
+ *  1) Loop through numbers 1-20
+ *  2) For each number, if input mod i is 0, keep going
+ *  3) If input mod i is not 0, input is not evenly divisible
+ */
+public class ProblemFive
+{
+    public boolean isDivisible(int input)
+    {
+        for(int i = 1; i < 21; i++)
+        {
+            if(input % i != 0)
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    public int findSmallestDivisible()
+    {
+        for(int i = 21; i > 0; i++)
+        {
+            if(isDivisible(i))
+            {
+                return i;
+            }
+        }
+        return 0;
+    }
+}
