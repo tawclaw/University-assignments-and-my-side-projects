@@ -1,0 +1,189 @@
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+/**
+ * This class can search through tweets and analyze them based on a sentiment analyzer
+ * 
+ * @author Nicholas Souter
+ * @version 20 November 2015
+ */
+public class TweetAnalyzer
+{
+    //fields
+    private ArrayList<Tweet> tweetCollection;
+
+    /**
+     * Constructor for Objects of Class TweetAnalyzer
+     */
+    public TweetAnalyzer()
+    {
+        tweetCollection = new ArrayList<Tweet>();
+        TwitterDataFile tweetFile = new TwitterDataFile("tweets.txt");
+
+        /*
+         * Sentinel loop that runs through all tweets in "tweets.txt"
+         * Then adds them to ArrayList tweetCollection
+         */
+        while(tweetFile.hasMoreTweets())                    //checks for more tweets
+        {
+            tweetCollection.add(tweetFile.nextTweet());     //adds tweets to tweetCollection
+        }
+    }
+
+    /**
+     * Prints each tweet in an ArrayList on its own line, each tweet separated by a blank line
+     * 
+     * @input ArrayList<Tweet>  the ArrayList of Tweets to draw from
+     */
+    public void printTweets(ArrayList<Tweet> inputTweets)
+    {
+        for(Tweet tweet : inputTweets)
+        {
+            System.out.println("");
+            System.out.println(tweet.toString());
+        }
+    }
+
+    /**
+     * Searches for a specified term in a collection of tweets
+     * 
+     * @input String  the term to be searched for
+     * @return ArrayList<Tweet>  the collection of tweets that include the searched term
+     */
+    public ArrayList<Tweet> find(String searchTerm)
+    {
+        ArrayList<Tweet> resultTweets = new ArrayList<Tweet>();
+        StringTokenizer tokens;
+
+        for(Tweet tweet : tweetCollection)
+        {
+            tokens = new StringTokenizer(tweet.getContent());
+            boolean found = false;
+            while(found == false)
+            {
+                if(tweet.getAuthor().equals(tweet.getContent()) && tweet.getAuthor().equals(searchTerm))
+                {
+                    resultTweets.add(tweet);
+                    found = true;
+                }
+                else
+                {
+                    while(tokens.hasMoreTokens())
+                    {
+                        if(searchTerm.equals(tokens.nextToken()))
+                        {
+                            resultTweets.add(tweet);
+                            found = true;
+                        }
+                    }
+                    found = true;
+                }
+            }
+        }
+
+        return resultTweets;
+    }
+
+    /**
+     * Prints out the tweets containing a specified search term and a summary by calling find()
+     * Also prints the average sentiment amongst those tweets, and the most positive tweet
+     * Also prints out whether most of the tweets were positive or not
+     * 
+     * @input String  the term to be searched for in the collection of tweets
+     */
+    public void printSearchResults(String searchTerm)
+    {
+        ArrayList<Tweet> resultTweets = find(searchTerm);
+        int numTweets = 0;
+        for(Tweet tweet : find(searchTerm))
+        {
+            numTweets++;
+        }
+
+        printTweets(find(searchTerm));
+        System.out.println("");
+        System.out.println("-------------------------");
+        System.out.println("Summary");
+        System.out.println("-------------------------");
+        System.out.println("Number of Tweets found: " + numTweets);
+        System.out.println("Average Sentiment of Tweets found: " + getAverageSentiment(find(searchTerm)));
+        System.out.println("Most positive Tweet: " + getMostPositiveTweet(find(searchTerm)));
+        if(isMostlyPositive(find(searchTerm)))
+        {
+            System.out.println("Most of these tweets were positive!");
+        }
+        else
+        {
+            System.out.println("Most of these tweets were negative...");
+        }
+    }
+
+    /**
+     * Finds the average sentiment of tweets in a collection
+     * 
+     * @input ArrayList<Tweet>  The collection of tweets to find the average sentiment of
+     * @return double  The value of the average sentiment of all tweets in the collection
+     */
+    public double getAverageSentiment(ArrayList<Tweet> inputTweets)
+    {
+        double avg = 0;
+        int numTweets = 0;
+        for(Tweet tweet : inputTweets)
+        {
+            avg += tweet.getSentiment();
+            numTweets++;
+        }
+        avg = avg / numTweets;
+        return avg;
+    }
+
+    /**
+     * Finds the Tweet in a collection that has the highest sentiment value
+     * 
+     * @input ArrayList<Tweet>  the collection of Tweets to iterate though
+     * @return Tweet  the tweet with the highest sentiment value
+     */
+    public Tweet getMostPositiveTweet(ArrayList<Tweet> inputTweets)
+    {
+        Tweet happiest = inputTweets.get(0);
+        for(Tweet tweet : inputTweets)
+        {
+            if(tweet.getSentiment() > happiest.getSentiment())
+            {
+                happiest = tweet;
+            }
+        }
+        return happiest;
+    }
+    
+    /**
+     * Determines whether a collection of tweets is mostly positive or mostly negative
+     * 
+     * @input ArrayList<Tweet>  the collection of tweets to iterate through
+     * @return boolean  true if most tweets are positive, false if most tweets are negative or equal
+     */
+    public boolean isMostlyPositive(ArrayList<Tweet> inputTweets)
+    {
+        int numPositive = 0;
+        int numNegative = 0;
+        for(Tweet tweet : inputTweets)
+        {
+            if(tweet.getSentiment() > 0)
+            {
+                numPositive++;
+            }
+            else if(tweet.getSentiment() < 0)
+            {
+                numNegative++;
+            }
+        }
+        
+        if(numPositive > numNegative)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}
